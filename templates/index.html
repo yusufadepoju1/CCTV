@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Intrusion Detection System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header glass-panel">
+            <div class="logo">
+                <span class="status-indicator live"></span>
+                <h1>Secure<span class="highlight">Vision</span> AI</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="active" id="nav-monitoring">Monitoring</a>
+                <a href="#" id="nav-settings">Settings</a>
+                <a href="#">Export Logs</a>
+            </nav>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="main-grid">
+            <!-- Video Feed Section -->
+            <section class="video-section">
+                <div class="panel-header">
+                    <h2>Live Camera Feed</h2>
+                    <span class="camera-status">CAM-01 Active</span>
+                </div>
+                <div class="video-container glass-panel" id="video-wrapper">
+                    <img src="{{ url_for('video_feed') }}" alt="Live camera feed streaming" id="video-stream">
+                    <!-- Overlay Canvas for Drawing -->
+                    <canvas id="drawing-canvas"></canvas>
+                    
+                    <!-- Overlay elements if needed -->
+                    <div class="overlay-ui">
+                        <div class="recording-indicator">
+                            <span class="pulse-dot"></span> REC
+                        </div>
+                    </div>
+                </div>
+                <!-- Drawing Controls -->
+                <div id="drawing-controls" class="glass-panel" style="display: none; padding: 1rem; margin-top: 1rem; text-align: center;">
+                    <p style="margin-bottom: 1rem; color: var(--accent);">Click on the video feed to map new restricted area points.</p>
+                    <button id="btn-save-poly" class="btn-primary" style="display:inline-block; margin-right: 1rem;">Save Polygon</button>
+                    <button id="btn-cancel-poly" class="btn-secondary" style="display:inline-block;">Cancel</button>
+                </div>
+            </section>
+
+            <!-- Intrusion History Section -->
+            <section class="history-section">
+                <div class="panel-header">
+                    <h2>Intrusion History</h2>
+                    <button id="refresh-btn" class="btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 2v6h6"></path></svg>
+                        Refresh
+                    </button>
+                </div>
+                
+                <div class="history-list glass-panel" id="history-container">
+                    <div class="loading-state">Loading history logs...</div>
+                    <!-- History cards injected by JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="lightbox">
+        <div class="settings-content glass-panel">
+            <span class="close-modal" id="close-settings">&times;</span>
+            <h2>System Configuration</h2>
+            
+            <div class="form-group">
+                <label>Video Source (Enter '0' for WebCam or an RTSP URL)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="source-input" placeholder="e.g. 0 or rtsp://..." class="form-control">
+                    <button id="btn-update-source" class="btn-primary">Update</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Or Upload Sample MP4 Video</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="file" id="video-upload" accept="video/mp4" class="form-control" style="padding: 0.2rem;">
+                    <button id="btn-upload-video" class="btn-primary">Upload</button>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 2rem;">
+                <label>Restricted Area Setup</label>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    Interactively draw a custom virtual boundary on the live camera feed. 
+                </p>
+                <button id="btn-draw-poly" class="btn-primary" style="width: 100%; justify-content: center;">
+                    Draw Custom Polygon
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox for Screenshots -->
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="lightbox-caption"></div>
+    </div>
+
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=2"></script>
+</body>
+</html>
